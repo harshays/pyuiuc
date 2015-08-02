@@ -1,0 +1,4 @@
+requests
+wheel
+nose
+responses
