@@ -27,10 +27,10 @@ class URL(object):
     def __init__(self, **params):
         self.endpointsdict = params
         self.setup()
-        self.build()
-
-        url_suffix = '/'+build if build else build
-        self.url   = '{}{}.{}'.format(self.prefix, url_suffix, self.suffix)
+        if not hasattr(self, 'url'):
+            build = self.build()
+            url_suffix = '/'+build if build else build
+            self.url   = '{}{}.{}'.format(self.prefix, url_suffix, self.suffix)
 
     def setup(self):
         '''build url'''
@@ -61,3 +61,6 @@ class URL(object):
 
     def __str__(self):
         return self.url
+
+    def __eq__(self, other):
+        return self.url == other.url

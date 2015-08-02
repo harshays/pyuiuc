@@ -51,7 +51,7 @@ class TestURL(unittest.TestCase):
     def test_str(self):
         durl = {'url':self.prefix+'/test'}
         obj  = URL(**durl)
-        self.assertEqual(str(o), durl['url'])
+        self.assertEqual(str(obj), durl['url'])
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_eq(self):
+        self.assertEqual(URL(**self.endpoints_kv), URL(**self.endpoints_kv))
