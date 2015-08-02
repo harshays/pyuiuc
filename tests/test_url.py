@@ -5,7 +5,7 @@ from   .utils       import generate_valid_params, generate_invalid_params, get_k
 
 class TestURL(unittest.TestCase):
     '''
-    tests the URL builder class
+    tests URL builder class
     '''
     def setUp(self):
         self.endpoints    = URL.endpoints
