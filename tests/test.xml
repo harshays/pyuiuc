@@ -1,0 +1,10 @@
+<test name="test">
+    <label>label</label>
+    <description>description</description>
+    <courses>
+        <course id="id1" href="http://courses.illinois.edu/cisapp/explorer/test1">course 1</course>
+        <course id="id2" href="http://courses.illinois.edu/cisapp/explorer/test2">course 2</course>
+        <course id="id3" href="http://courses.illinois.edu/cisapp/explorer/test3">course 3</course>
+        <course id="id4" href="http://courses.illinois.edu/cisapp/explorer/test4">course 4</course>
+    </courses>
+</test>
