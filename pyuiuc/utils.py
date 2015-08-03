@@ -26,8 +26,9 @@ type_tag_map = {
         'contactName','contactTitle','statusCode','sectionNumber',
         'sectionNotes', 'partOfTerm','addressLine1','addressLine2',
         'phoneNumber','webSiteURL', 'description','endDate',
-        'collegeDepartmentDescription','creditHours',' courseSectionInformation',
-        'sectionStatusCode','startDate','enrollmentStatus', 'subjectComment'
+        'collegeDepartmentDescription','creditHours','courseSectionInformation',
+        'sectionStatusCode','startDate','enrollmentStatus', 'subjectComment',
+        'sectionText'
     ]
 }
 

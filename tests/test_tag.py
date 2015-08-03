@@ -84,6 +84,14 @@ class TestTag(unittest.TestCase):
         self.assertGreater(len(self.obj.get_children()), len(list(self.obj.element)))
 
     @responses.activate
+    def test_attributes(self):
+        responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
+                      status=200, content_type='text/xml')
+
+        attributes = self.obj.attributes
+        self.assertTrue(attributes['name'] == self.obj['name'] == 'test')
+
+    @responses.activate
     def test_grouped_children(self):
         responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
                       status=200, content_type='text/xml')
@@ -104,10 +112,26 @@ class TestTag(unittest.TestCase):
                       status=200, content_type='text/xml')
 
         with self.assertRaises(ValueError):
-            f = self.obj.find()
+            obj = self.obj.find()
 
         by_name =      self.obj.find(tag_name='course')
         by_type =      self.obj.find(tag_type='endpoint')
         by_name_type = self.obj.find(tag_name='course', tag_type='endpoint')
 
         self.assertTrue(by_name == by_type == by_name_type)
+
+    @responses.activate
+    def test_find_by_attributes(self):
+        responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
+                      status=200, content_type='text/xml')
+
+        elem = self.obj.find_by_attributes(tag_name='course', 
+                                                   tagify=False, id='id1')
+
+        self.assertEqual(elem.tag, 'course')
+        self.assertEqual(elem.attrib['id'], 'id1')
+
+        by_name_attr_none = self.obj.find_by_attributes(tag_name='course',
+                                                        tagify=False, test='test')
+
+        self.assertFalse(by_name_attr_none)
