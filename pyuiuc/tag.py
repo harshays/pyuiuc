@@ -6,17 +6,17 @@ import xml.etree.ElementTree  as     xml
 import requests
 
 """
-tags.py 
+tags.py
 This module contains the base class for reading CISAPI XMLs
 """
 class Tag(object):
     """
-    Base class to read CISAPI XMLs 
+    Base class to read CISAPI XMLs
 
     parameters
         - named endpoints parameters dict
             - year        year
-            - semester    spring, summer or fall 
+            - semester    spring, summer or fall
             - subject     subject abbr  (e.g. CS)
             - course      course number (e.g. 225)
             - section     section CRN   (e.g. 12345)
@@ -25,12 +25,13 @@ class Tag(object):
     url_cls = URL
 
     def __new__(cls, **params):
+        'use object from cache if same url'
         url_obj = cls.url_cls(**params)
         url     = url_obj.url
         if url in cls.cache and cls.cache[url]:
             return cls.cache[url]
         obj = object.__new__(cls)
-        cls.cache[url] = obj 
+        cls.cache[url] = obj
         return obj
 
     @classmethod
@@ -39,9 +40,7 @@ class Tag(object):
 
     @classmethod
     def tagify(cls, elements):
-        '''
-        replaces endpoint xml.Element by its Tag object
-        '''
+        'replaces endpoint xml.Element by its Tag object'
         is_endpoint = lambda e: get_tag_type(e.tag) == 'endpoint'
         for idx, e in enumerate(elements):
             elements[idx] = cls.from_url(e.attrib['href']) if is_endpoint(e) else e
@@ -66,7 +65,8 @@ class Tag(object):
 
     def make_request(self):
         '''
-        makes request to get xml content and creates XML.element object
+        makes request to get xml content and
+        creates XML.element object
         '''
         self._request = requests.get(self.url.url)
         self._text    = self._request.text
@@ -82,7 +82,7 @@ class Tag(object):
         returns a dictionary mapping tag names to tag cdata
         return only tags that are of type 'info' (see utils)
         '''
-        return {ch.tag:ch.text for ch in self.element 
+        return {ch.tag:ch.text for ch in self.element
                 if get_tag_type(ch.tag) == 'info'}
 
     def get_children(self, tagify=True):
@@ -103,7 +103,7 @@ class Tag(object):
         optional keyword arguments
             - group_by    defaults to type
                 - type    group by type of tag (info, parent or endpoint)
-                - tag     group by name of tag 
+                - tag     group by name of tag
 
             - tagify      convert valid xml.Element objects to Tag objects
         '''
@@ -125,7 +125,7 @@ class Tag(object):
         returns a list of descendants, optionally filtered by tag and tag type
         converts 'endpoint' xml elements to Tag objects
 
-        optional keyword arguments 
+        optional keyword arguments
             - tag_name   name of tag (e.g. course, sections)
             - tag_type   type of tag (info, parent, endpoint)
             - tagify     defaults to True
@@ -158,7 +158,7 @@ class Tag(object):
 
         optional keyword arguments
             - tag_name    name of tag
-            - attributes  dict of attributes to filter by 
+            - attributes  dict of attributes to filter by
             - tagify      converts to Tag objects. defaults to True
         '''
         all_dict = self.get_grouped_children(group_by='tag', tagify=False)
@@ -173,7 +173,7 @@ class Tag(object):
                 if elem.attrib.get(attr, None) == str(val):
                     filtered.append(elem)
 
-        if tagify: 
+        if tagify:
             self.tagify(filtered)
 
         if filtered:
@@ -184,7 +184,7 @@ class Tag(object):
     @staticmethod
     def _children(element, lst=[]):
         '''
-        get all children and subchildren of element 
+        get all children and subchildren of element
         '''
         for ch in element:
             lst.append(ch)
@@ -193,7 +193,7 @@ class Tag(object):
         return lst
 
     def __str__(self):
-        return "{} object of URL {}".format(type(self).__name__, self.url.url)
+        return "{} object of URL {}".format(type(self).__name__, self.url)
 
     def __eq__(self, other):
         if not isinstance(other, type(self)): return False
