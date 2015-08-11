@@ -39,14 +39,23 @@ class Tag(object):
         return cls(url=url)
 
     @classmethod
+    def from_element(cls, elem):
+        'xml.Element -> Tag; only if element type is endpoint'
+        if get_tag_type(elem.tag) != 'endpoint':
+            raise InvalidParametersError
+        url = elem.attrib['href']
+        return cls.from_url(url)
+
+    @classmethod
     def tagify(cls, elements):
         'replaces endpoint xml.Element by its Tag object'
         is_endpoint = lambda e: get_tag_type(e.tag) == 'endpoint'
-        for idx, e in enumerate(elements):
-            elements[idx] = cls.from_url(e.attrib['href']) if is_endpoint(e) else e
+        for idx, elem in enumerate(elements):
+            elements[idx] = cls.from_element(elem) if is_endpoint(elem) else elem
 
     def __init__(self, **params):
-        self.url          = self.url_cls(**params)
+        self.url     = self.url_cls(**params)
+        self.logger  = get_logger(type(self).__name__)
         self.made_request = False
 
     @property
@@ -137,7 +146,7 @@ class Tag(object):
             raise ValueError('must provide tag or tag_type')
 
         if tag_type:
-            all_dict = self.get_grouped_children(tagify=False)
+            all_dict = self.get_grouped_children(group_by='type', tagify=False)
             filtered = all_dict.get(tag_type, [])
             if tag_name:
                 filtered = list(filter(lambda t:t.tag == tag_name, filtered))
@@ -150,10 +159,9 @@ class Tag(object):
 
         return filtered
 
-    # change to use from_element
     def find_by_attributes(self, tag_name=None, tagify=True, **attributes):
         '''
-        returns the first descendants, that matches tag_name and attributes
+        returns the first descendant, that matches tag_name and attributes
         converts 'endpoint' xml elements to Tag objects
 
         optional keyword arguments

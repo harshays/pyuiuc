@@ -20,7 +20,7 @@ class TestTag(unittest.TestCase):
 
     def test_init_url(self):
         params = {'url':URL.prefix}
-        
+
         obj          = Tag(**params)
         from_url_obj = Tag.from_url(params['url'])
 
@@ -28,6 +28,17 @@ class TestTag(unittest.TestCase):
         self.assertTrue(bool(from_url_obj))
         self.assertIsInstance(obj.url, URL)
         self.assertIsInstance(from_url_obj.url, URL)
+
+    @responses.activate
+    def test_from_element(self):
+        responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
+                      status=200, content_type='text/xml')
+
+        obj    = Tag(**self.params)
+        course = obj.find(tag_name='course', tagify=False)[0]
+
+        course_obj = Tag.from_element(course)
+        self.assertIsInstance(course_obj, Tag)
 
     @responses.activate
     def test_element(self):
@@ -73,7 +84,7 @@ class TestTag(unittest.TestCase):
 
         self.params['course'] = 'course_'
         obj2 = Tag(**self.params)
-        
+
         self.assertFalse(id(obj2) == id(obj))
 
     @responses.activate
@@ -105,7 +116,7 @@ class TestTag(unittest.TestCase):
 
         self.assertTrue(all(map(lambda o: isinstance(o, Tag), group_ch_type_tagify['endpoint'])))
         self.assertTrue(all(map(lambda o: isinstance(o, Tag), group_ch_tag_tagify['course'])))
-    
+
     @responses.activate
     def test_find(self):
         responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
@@ -125,7 +136,7 @@ class TestTag(unittest.TestCase):
         responses.add(responses.GET, utils.url_re, body=utils.get_xml_body(),
                       status=200, content_type='text/xml')
 
-        elem = self.obj.find_by_attributes(tag_name='course', 
+        elem = self.obj.find_by_attributes(tag_name='course',
                                                    tagify=False, id='id1')
 
         self.assertEqual(elem.tag, 'course')
