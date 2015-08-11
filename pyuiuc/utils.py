@@ -38,4 +38,4 @@ tag_type_map = {tag : tagtype for tagtype, tags in
 def get_tag_type(tag_name):
     if tag_name in tag_type_map:
         return tag_type_map[tag_name]
-    raise UnknownTagError(tag_name)
+    return 'unknown'

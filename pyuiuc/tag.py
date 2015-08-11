@@ -96,12 +96,12 @@ class Tag(object):
         if tagify: self.tagify(ch)
         return ch
 
-    def get_grouped_children(self, group_by='type', tagify=True):
+    def get_grouped_children(self, group_by='tag', tagify=True):
         '''
         returns a dictionary of xml.Element descendants
 
         optional keyword arguments
-            - group_by    defaults to type
+            - group_by    defaults to tag
                 - type    group by type of tag (info, parent or endpoint)
                 - tag     group by name of tag
 
