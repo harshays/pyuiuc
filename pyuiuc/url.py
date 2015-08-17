@@ -11,7 +11,7 @@ class URL(object):
     parameters
         - named endpoints parameters dict
             - year        year
-            - semester    spring, summer or fall 
+            - semester    spring, summer or fall
             - subject     subject abbr
             - course      course number
             - section     section CRN
@@ -36,7 +36,7 @@ class URL(object):
         '''build url'''
         if 'url' in self.endpointsdict:
             url = self.endpointsdict['url']
-            if not url.startswith(self.prefix):
+            if not url.startswith(URL.prefix):
                 raise InvalidParametersError("Invalid URL {}".format(url))
             self.url = url
             return
@@ -60,7 +60,7 @@ class URL(object):
         return '/'.join(mid_url)
 
     def __str__(self):
-        return self.url
+        return self.url.split('/explorer')[-1]
 
     def __eq__(self, other):
         return self.url == other.url

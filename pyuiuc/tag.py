@@ -11,7 +11,7 @@ This module contains the base class for reading CISAPI XMLs
 """
 class Tag(object):
     """
-    Base class to read CISAPI XMLs
+    Base class to navigate CISAPI XMLs
 
     parameters
         - named endpoints parameters dict
@@ -42,7 +42,7 @@ class Tag(object):
     def from_element(cls, elem):
         'xml.Element -> Tag; only if element type is endpoint'
         if get_tag_type(elem.tag) != 'endpoint':
-            raise InvalidParametersError
+            raise InvalidParametersError("{} type is not endpoint".format(elem.tag))
         url = elem.attrib['href']
         return cls.from_url(url)
 
@@ -55,7 +55,6 @@ class Tag(object):
 
     def __init__(self, **params):
         self.url     = self.url_cls(**params)
-        self.logger  = get_logger(type(self).__name__)
         self.made_request = False
 
     @property

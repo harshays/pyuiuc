@@ -72,7 +72,7 @@ class TestTag(unittest.TestCase):
         self.assertEqual(obj, self.obj)
 
     def test_str(self):
-        self.assertEqual(str(self.obj), "Tag object of URL {}".format(self.obj.url.url))
+        self.assertEqual(str(self.obj), "Tag object of URL {}".format(self.obj.url))
 
     @responses.activate
     def test_new(self):
