@@ -18,8 +18,8 @@ def generate_invalid_params():
         del invalid[i]
         yield invalid
 
-def get_xml_body():
+def get_xml_body(fname='./test.xml'):
     dpth = os.path.dirname(os.path.abspath(__file__))
-    pth = os.path.join(dpth, 'test.xml')
+    pth = os.path.join(dpth, fname)
     with open(pth, 'r') as f: content = f.read()
     return content
