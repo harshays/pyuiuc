@@ -23,4 +23,4 @@ from pyuiuc.schedule import Schedule
 help(Schedule)
 ```
 #### Tests
-```tests/``` have 100% coverageUIUC CISAPI Python API Wrapper
+```tests/``` have 100% coverage
